@@ -1,0 +1,35 @@
+
+services:
+  app_vet:
+    container_name: app_vet
+    build: demo.Clinica_Veterinaria
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://clinica_vet:5432/clinica_veterinaria?createDatabaseIfNotExist=true&serverTimezone=UTC
+      DB_USER_NAME: 
+      DB_PASSWORD: 
+    restart: always
+    depends_on:
+      clinica_vet:
+          condition: service_healthy
+  clinica_vet:
+    container_name: clinica_vet
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: clinica_veterinaria
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d clinica_veterinaria"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  pgdata:
