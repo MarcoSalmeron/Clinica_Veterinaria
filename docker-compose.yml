@@ -1,7 +1,9 @@
 services:
   app_vet:
     container_name: app_vet
-    build: demo.Clinica_Veterinaria
+    build:
+      context: ./demo.Clinica_Veterinaria
+      dockerfile: Dockerfile
     mem_limit: 512m
     ports:
       - "8080:8080"
